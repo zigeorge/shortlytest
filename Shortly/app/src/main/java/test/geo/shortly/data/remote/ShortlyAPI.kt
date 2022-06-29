@@ -8,7 +8,7 @@ import test.geo.shortly.data.remote.responses.ShortLinkResponse
 interface ShortlyAPI {
 
     @POST("shorten")
-    fun getShortenedLink(
+    suspend fun getShortenedLink(
         @Query("url") url: String
     ) : Response<ShortLinkResponse>
 

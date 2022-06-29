@@ -7,10 +7,13 @@ import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import test.geo.shortly.data.local.ShortlyDao
 import test.geo.shortly.data.local.ShortlyDatabase
 import test.geo.shortly.data.remote.ShortlyAPI
 import test.geo.shortly.other.Constants.BASE_URL
 import test.geo.shortly.other.Constants.DB_NAME
+import test.geo.shortly.repositories.ShortlyRepository
+import test.geo.shortly.repositories.ShortlyRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -37,5 +40,12 @@ object Module {
             .build()
             .create(ShortlyAPI::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideShortlyRepository(
+        dao: ShortlyDao,
+        api: ShortlyAPI
+    ) = ShortlyRepositoryImpl(dao, api) as ShortlyRepository
 
 }

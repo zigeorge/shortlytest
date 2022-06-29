@@ -4,5 +4,5 @@ data class ShortLinkResponse(
     val ok: Boolean,
     val result: ShortLinkResult? = null,
     val error_code: Int,
-    val error: String = "Unknown Error"
+    val error: String
 )
