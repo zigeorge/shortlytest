@@ -16,4 +16,6 @@
     <string name="creating_link">Shortening link ..</string>
     <string name="failed_to_shorten">Failed to shorten link</string>
     <string name="invalid_link">Invalid URL</string>
+    <string name="success">Successful</string>
+    <string name="loading">Loading ...</string>
 </resources>

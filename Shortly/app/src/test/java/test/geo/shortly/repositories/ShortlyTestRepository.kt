@@ -2,6 +2,8 @@ package test.geo.shortly.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
+import kotlinx.coroutines.flow.Flow
 import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.data.remote.responses.ShortLinkResponse
 import test.geo.shortly.data.remote.responses.ShortLinkResult
@@ -54,7 +56,7 @@ class ShortlyTestRepository : ShortlyRepository {
         }
     }
 
-    override fun getLinkHistory(): LiveData<List<ShortLink>> {
-        return observableLinkHistory
+    override fun getLinkHistory(): Flow<List<ShortLink>> {
+        return observableLinkHistory.asFlow()
     }
 }

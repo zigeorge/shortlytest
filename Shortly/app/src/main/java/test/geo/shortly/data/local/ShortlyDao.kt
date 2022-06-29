@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.Flow
 interface ShortlyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertLink(shortLink: ShortLink)
+    suspend fun insertLink(shortLink: ShortLink)
 
     @Delete
-    fun deleteLink(shortLink: ShortLink)
+    suspend fun deleteLink(shortLink: ShortLink)
 
     @Query("SELECT * FROM short_links")
     fun observeAllLink(): Flow<List<ShortLink>>

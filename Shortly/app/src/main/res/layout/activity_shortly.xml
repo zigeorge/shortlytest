@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,14 +24,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.214" />
+                app:layout_constraintGuide_percent="0.12" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/graphicGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="0.72" />
 
             <TextView
                 android:id="@+id/tvLabelShortly"
@@ -39,7 +40,7 @@
                 android:text="@string/label_shortly"
                 android:fontFamily="@font/poppins"
                 android:textStyle="bold"
-                android:textSize="@dimen/_18sdp"
+                android:textSize="@dimen/_20sdp"
                 android:textColor="@color/grayish_violet"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,8 +84,8 @@
                 app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <fragment
-            android:id="@+id/linkHistoryFragment"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/linkHistoryFragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:name="test.geo.shortly.ui.LinkHistoryFragment"
@@ -127,7 +128,10 @@
                         android:gravity="center"
                         android:hint="@string/hint_shorten_a_link_here"
                         android:inputType="textUri"
+                        android:imeOptions="actionDone"
                         android:textStyle="normal"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/gray"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

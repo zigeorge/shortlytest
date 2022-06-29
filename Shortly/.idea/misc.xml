@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/George/workspace/shortly-app-qwqfes/Shortly/app/src/main/res/layout/activity_shortly.xml" value="0.17552083333333332" />
+        <entry key="..\:/George/workspace/shortly-app-qwqfes/Shortly/app/src/main/res/layout/loading_view.xml" value="0.17447916666666666" />
         <entry key="app/src/main/res/drawable/bg_btn_url_short.xml" value="0.1775" />
         <entry key="app/src/main/res/drawable/bg_main_bottom_rectangle.xml" value="0.1775" />
         <entry key="app/src/main/res/drawable/bg_main_shadow.xml" value="0.1775" />
