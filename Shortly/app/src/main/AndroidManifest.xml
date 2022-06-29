@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Shortly"
         tools:targetApi="31">
         <activity
-            android:name=".ShortlyActivity"
+            android:name=".ui.ShortlyActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

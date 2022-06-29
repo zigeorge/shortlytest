@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ShortlyActivity">
+        tools:context=".ui.ShortlyActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clGetStarted"
@@ -87,8 +87,9 @@
             android:id="@+id/linkHistoryFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:name="test.geo.shortly.ui.LinkHistoryFragment"
             app:defaultNavHost="true"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/clMainActionContainer"
             app:layout_constraintTop_toTopOf="parent" />
 
