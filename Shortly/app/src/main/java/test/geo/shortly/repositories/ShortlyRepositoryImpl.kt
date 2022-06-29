@@ -1,5 +1,7 @@
 package test.geo.shortly.repositories
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.data.local.ShortlyDao
@@ -18,7 +20,7 @@ class ShortlyRepositoryImpl @Inject constructor(
                 shortlyDao.insertLink(
                     ShortLink(
                         response.body()!!.result!!.original_link,
-                        response.body()!!.result!!.shortLink
+                        response.body()!!.result!!.full_short_link
                     )
                 )
                 response.body()!!
@@ -42,8 +44,8 @@ class ShortlyRepositoryImpl @Inject constructor(
         shortlyDao.deleteLink(shortLink)
     }
 
-    override fun getLinkHistory(): Flow<List<ShortLink>> {
-        return shortlyDao.observeAllLink()
+    override fun getLinkHistory(): LiveData<List<ShortLink>> {
+        return shortlyDao.observeAllLink().asLiveData()
     }
 
 

@@ -1,14 +1,14 @@
 package test.geo.shortly.repositories
 
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.LiveData
 import test.geo.shortly.data.local.ShortLink
-import test.geo.shortly.data.remote.responses.CommonResponse
+import test.geo.shortly.data.remote.responses.ShortLinkResponse
 
 interface ShortlyRepository {
 
-    suspend fun insertLink(shortLink: String): CommonResponse
+    suspend fun insertLink(shortLink: String): ShortLinkResponse
 
     suspend fun deleteLink(shortLink: ShortLink)
 
-    fun getLinkHistory(): Flow<List<ShortLink>>
+    fun getLinkHistory(): LiveData<List<ShortLink>>
 }

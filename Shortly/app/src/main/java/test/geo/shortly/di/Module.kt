@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import test.geo.shortly.data.local.ShortlyDao
@@ -12,11 +14,14 @@ import test.geo.shortly.data.local.ShortlyDatabase
 import test.geo.shortly.data.remote.ShortlyAPI
 import test.geo.shortly.other.Constants.BASE_URL
 import test.geo.shortly.other.Constants.DB_NAME
+import test.geo.shortly.other.NetworkConnection
+import test.geo.shortly.other.ShortlyUtil
 import test.geo.shortly.repositories.ShortlyRepository
 import test.geo.shortly.repositories.ShortlyRepositoryImpl
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 object Module {
 
     @Singleton
@@ -47,5 +52,11 @@ object Module {
         dao: ShortlyDao,
         api: ShortlyAPI
     ) = ShortlyRepositoryImpl(dao, api) as ShortlyRepository
+
+    @Singleton
+    @Provides
+    fun provideNetworkInfo(
+        @ApplicationContext context: Context
+    ) = NetworkConnection(ShortlyUtil.checkNetworkConnection(context))
 
 }
