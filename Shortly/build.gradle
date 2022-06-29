@@ -16,6 +16,7 @@ ext {
     lifecycleVersion = '2.4.0'
     materialVersion = '1.4.0'
     roomVersion = '2.3.0'
+    sdpVersion = '1.1.0'
     // testing
     junitVersion = '4.13.2'
     espressoVersion = '3.4.0'

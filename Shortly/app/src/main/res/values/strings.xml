@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Shortly</string>
+    <string name="hint_shorten_a_link_here">Shorten a link here …</string>
+    <string name="btn_shorten_it">SHORTEN IT!</string>
+    <string name="label_shortly">Shortly</string>
+    <string name="cd_graphic_for_getting_start">Graphic for getting start</string>
+    <string name="let_s_get_started">Let’s get started!</string>
+    <string name="disclaimer_get_started">Paste your first link into the field to shorten it</string>
+    <string name="label_your_link_history">Your Link History</string>
+    <string name="cd_delete_button_to_remove_a_history">delete button to remove a history</string>
+    <string name="dummy_origin_link">http://www.test.test/testing_is_important/do_test/or_die</string>
+    <string name="dummy_shorten_url">https://rel.ink/a78sla</string>
+    <string name="btn_text_copy">COPY</string>
+    <string name="btn_text_copied">COPIED!</string>
+    <string name="empty_link_error">Please add a link here</string>
+    <string name="creating_link">Shortening link ..</string>
+    <string name="failed_to_shorten">Failed to shorten link</string>
+    <string name="invalid_link">Invalid URL</string>
 </resources>

@@ -63,6 +63,7 @@ dependencies {
     // UI
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "com.intuit.sdp:sdp-android:$rootProject.sdpVersion"
 
     // Testing
     testImplementation "junit:junit:$rootProject.junitVersion"
