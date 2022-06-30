@@ -40,6 +40,7 @@ class LoadingView {
             dialog.setContentView(R.layout.loading_view)
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color .TRANSPARENT))
             dialog.setCancelable(false)
+            dialog.create()
             val loadingView = LoadingView()
             loadingView.setDialog(dialog)
             return loadingView

@@ -70,7 +70,7 @@
             android:id="@+id/tvCopyBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btn_url_short"
+            android:background="@drawable/btn_bg_copy"
             android:gravity="center"
             android:text="@string/btn_text_copy"
             android:textColor="@color/white"

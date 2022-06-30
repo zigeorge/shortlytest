@@ -11,6 +11,7 @@ import test.geo.shortly.other.Resource
 import test.geo.shortly.other.ShortlyUtil
 import test.geo.shortly.repositories.ShortlyRepository
 import test.geo.shortly.ui.LinkError
+import test.geo.shortly.ui.model.LinkHistoryListItem
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,7 +20,10 @@ class ShortlyViewModel @Inject constructor(
     private val networkConnection: NetworkConnection
 ) : ViewModel() {
 
-    val linkHistory = repository.getLinkHistory().asLiveData()
+    val allLink = repository.getLinkHistory().asLiveData()
+    val linkHistory = MutableLiveData<List<LinkHistoryListItem>>()
+
+    private var copiedLink: LinkHistoryListItem? = null
 
     private val _addShortLinkStatus = MutableLiveData<Event<Resource<ShortLinkResponse>>>()
     val addShortLinkStatus: LiveData<Event<Resource<ShortLinkResponse>>> = _addShortLinkStatus
@@ -53,6 +57,15 @@ class ShortlyViewModel @Inject constructor(
 
     fun deleteLnk(shortLink: ShortLink) = viewModelScope.launch {
         repository.deleteLink(shortLink)
+    }
+
+    fun linkHistoryUpdated(copiedLink: LinkHistoryListItem? = null) {
+        if (copiedLink != null)
+            this.copiedLink = copiedLink
+        val allLink = allLink.value
+        if (allLink.isNullOrEmpty()) return
+        val linkHistory = LinkHistoryListItem.fromAllLinks(allLink, this.copiedLink)
+        this.linkHistory.postValue(linkHistory)
     }
 
 }

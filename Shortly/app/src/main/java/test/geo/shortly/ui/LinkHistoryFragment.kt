@@ -1,7 +1,10 @@
 package test.geo.shortly.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +24,7 @@ class LinkHistoryFragment : Fragment(R.layout.fragment_link_history) {
 
         viewModel = ViewModelProvider(requireActivity())[ShortlyViewModel::class.java]
 
+        viewModel.linkHistoryUpdated()
         setRecyclerView()
         viewModel.linkHistory.observe(requireActivity()) {
             linkHistoryAdapter.submitList(it)
@@ -38,6 +42,21 @@ class LinkHistoryFragment : Fragment(R.layout.fragment_link_history) {
         linkHistoryAdapter.setOnRemoveIconClickListener {
             viewModel.deleteLnk(it)
         }
+
+        linkHistoryAdapter.setOnCopyButtonClickListener {
+            copyLink(it.shortLink.shortLink)
+            viewModel.linkHistoryUpdated(it)
+        }
+    }
+
+    private fun copyLink(link: String) {
+        val clipboard: ClipboardManager? =
+            ContextCompat.getSystemService(
+                requireContext(),
+                ClipboardManager::class.java
+            )
+        val clip = ClipData.newPlainText(link, link)
+        clipboard?.setPrimaryClip(clip)
     }
 
 }

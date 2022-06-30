@@ -60,10 +60,4 @@ object Module {
         @ApplicationContext context: Context
     ) = NetworkConnection(ShortlyUtil.checkNetworkConnection(context))
 
-    @Singleton
-    @Provides
-    fun provideLoadingView(
-        @ApplicationContext context: Context
-    ) = LoadingView.createLoading(context)
-
 }

@@ -19,14 +19,13 @@ import test.geo.shortly.data.remote.responses.ShortLinkResponse
 import test.geo.shortly.other.Resource
 import test.geo.shortly.other.Status
 import test.geo.shortly.ui.viewmodel.ShortlyViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShortlyActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ShortlyViewModel
 
-    @Inject lateinit var loadingView: LoadingView
+    private lateinit var loadingView: LoadingView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +33,9 @@ class ShortlyActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[ShortlyViewModel::class.java]
 
-        viewModel.linkHistory.observe(this) {
+        loadingView = LoadingView.createLoading(this)
+
+        viewModel.allLink.observe(this) {
             if (!it.isNullOrEmpty()) showHistory(savedInstanceState)
             else showGetStarted()
         }
@@ -78,7 +79,10 @@ class ShortlyActivity : AppCompatActivity() {
         when (resource?.status) {
             Status.ERROR -> handleError(resource)
             Status.LOADING -> showLoading()
-            Status.SUCCESS -> showSnackBar(getString(R.string.success))
+            Status.SUCCESS -> {
+                resetEditText()
+                showSnackBar(getString(R.string.success))
+            }
             else -> showSnackBar(getString(R.string.failed_to_shorten))
         }
 

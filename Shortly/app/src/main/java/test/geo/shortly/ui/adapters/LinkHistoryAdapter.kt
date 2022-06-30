@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_link_history.view.*
 import test.geo.shortly.R
 import test.geo.shortly.data.local.ShortLink
+import test.geo.shortly.ui.model.LinkHistoryListItem
 
 class LinkHistoryAdapter :
-    ListAdapter<ShortLink, LinkHistoryAdapter.LinkHistoryViewHolder>(DiffCallback())  {
+    ListAdapter<LinkHistoryListItem, LinkHistoryAdapter.LinkHistoryViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinkHistoryViewHolder {
         return LinkHistoryViewHolder(
@@ -22,30 +23,29 @@ class LinkHistoryAdapter :
         )
     }
 
-    private var copiedLinkId: Int? = null
-
     override fun onBindViewHolder(holder: LinkHistoryViewHolder, position: Int) {
-        val shortLink = getItem(position)
+        val item = getItem(position)
         holder.itemView.apply {
-            tvOriginLink.text = shortLink.origin
-            tvShortenLink.text = shortLink.shortLink
+            tvOriginLink.text = item.shortLink.origin
+            tvShortenLink.text = item.shortLink.shortLink
 
-            if(copiedLinkId != null && shortLink.id == copiedLinkId) {
+            if (item.isCopied) {
                 tvCopyBtn.setBackgroundResource(R.drawable.btn_bg_copied)
                 tvCopyBtn.text = holder.context.getString(R.string.btn_text_copied)
             } else {
-                tvCopyBtn.setBackgroundResource(R.drawable.bg_btn_url_short)
+                tvCopyBtn.setBackgroundResource(R.drawable.btn_bg_copy)
                 tvCopyBtn.text = holder.context.getString(R.string.btn_text_copy)
             }
 
             ivRemoveHistory.setOnClickListener {
                 onRemoveIconClickListener?.let { click ->
-                    click(shortLink)
+                    click(item.shortLink)
                 }
             }
             tvCopyBtn.setOnClickListener {
-                copiedLinkId = shortLink.id
-                notifyDataSetChanged()
+                onCopyButtonClickListener?.let { click ->
+                    click(item)
+                }
             }
         }
     }
@@ -56,15 +56,28 @@ class LinkHistoryAdapter :
         onRemoveIconClickListener = listener
     }
 
-    class LinkHistoryViewHolder(itemView: View, val context: Context) : RecyclerView.ViewHolder(itemView)
-}
+    private var onCopyButtonClickListener: ((LinkHistoryListItem) -> Unit)? = null
 
-class DiffCallback : DiffUtil.ItemCallback<ShortLink>() {
-    override fun areItemsTheSame(oldItem: ShortLink, newItem: ShortLink): Boolean {
-        return oldItem.id == newItem.id
+    fun setOnCopyButtonClickListener(listener: (LinkHistoryListItem) -> Unit) {
+        onCopyButtonClickListener = listener
     }
 
-    override fun areContentsTheSame(oldItem: ShortLink, newItem: ShortLink): Boolean {
-        return newItem.id == oldItem.id
+    class LinkHistoryViewHolder(itemView: View, val context: Context) :
+        RecyclerView.ViewHolder(itemView)
+}
+
+class DiffCallback : DiffUtil.ItemCallback<LinkHistoryListItem>() {
+    override fun areItemsTheSame(
+        oldItem: LinkHistoryListItem,
+        newItem: LinkHistoryListItem
+    ): Boolean {
+        return oldItem.shortLink == newItem.shortLink
+    }
+
+    override fun areContentsTheSame(
+        oldItem: LinkHistoryListItem,
+        newItem: LinkHistoryListItem
+    ): Boolean {
+        return oldItem == newItem
     }
 }

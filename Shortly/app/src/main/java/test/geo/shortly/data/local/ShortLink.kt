@@ -10,4 +10,19 @@ class ShortLink (
     var shortLink: String,
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null
-)
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if(other?.javaClass != javaClass) return false
+        return other.hashCode() == hashCode()
+    }
+
+    override fun hashCode(): Int {
+        var result = origin.hashCode()
+        result = 31 * result + shortLink.hashCode()
+        result = 31 * result + (id ?: 0)
+        return result
+    }
+
+}
