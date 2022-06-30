@@ -1,5 +1,6 @@
 package test.geo.shortly.data.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -14,4 +15,5 @@ interface ShortlyDao {
 
     @Query("SELECT * FROM short_links")
     fun observeAllLink(): Flow<List<ShortLink>>
+
 }
