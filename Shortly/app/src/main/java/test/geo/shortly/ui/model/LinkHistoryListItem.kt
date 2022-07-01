@@ -1,18 +1,22 @@
 package test.geo.shortly.ui.model
 
 import test.geo.shortly.data.local.ShortLink
+import java.util.*
 
 data class LinkHistoryListItem(
     val shortLink: ShortLink,
     var isCopied: Boolean = false
 ) {
     companion object {
-        fun fromAllLinks(allLink: List<ShortLink>, copiedLink: LinkHistoryListItem?): List<LinkHistoryListItem> {
-            val linkHistory = ArrayList<LinkHistoryListItem>()
+        fun fromAllLinks(
+            allLink: List<ShortLink>,
+            copiedLink: LinkHistoryListItem?
+        ): List<LinkHistoryListItem> {
+            val linkHistory = LinkedList<LinkHistoryListItem>()
             allLink.forEach {
-                if(copiedLink != null && copiedLink.shortLink == it)
-                    linkHistory.add(LinkHistoryListItem(it, true))
-                else linkHistory.add(LinkHistoryListItem(it))
+                if (copiedLink != null && it.id == copiedLink.shortLink.id) {
+                    linkHistory.push(LinkHistoryListItem(it, true))
+                } else linkHistory.push(LinkHistoryListItem(it))
             }
             return linkHistory
         }

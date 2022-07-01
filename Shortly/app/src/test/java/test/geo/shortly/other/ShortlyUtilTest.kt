@@ -5,13 +5,15 @@ import org.junit.Test
 
 class ShortlyUtilTest {
 
-    val caseInvalidLink = "asdfasdfadswf"
-    val caseValidLinkWithHttp = "http://asdfsaf.asfsd"
-    val caseValidLinkWithHttps = "https://asdfsaf.asfsd"
-    val caseInvalidLinkWithHttp = "http://asdfsaf"
-    val caseInvalidLinkWithHttps = "https://asdfsaf"
-    val caseValidLinkWithoutPrefix = "asfasd.asdfdsa.asdfsaf"
-    val caseLinkEndingWithDot = "asfasd."
+    private val caseInvalidLink = "asdfasdfadswf"
+    private val caseValidLinkWithHttp = "http://asdfsaf.asfsd"
+    private val caseValidLinkWithHttps = "https://asdfsaf.asfsd"
+    private val caseInvalidLinkWithHttp = "http://asdfsaf"
+    private val caseInvalidLinkWithHttps = "https://asdfsaf"
+    private val caseValidLinkWithoutPrefix = "asfasd.asdfdsa.asdfsaf"
+    private val caseLinkEndingWithDot = "asfasd."
+    private val caseInvalidInputWithSpace = "asfasd aa asdf"
+    private val caseValidInputWithSpace = "asfasd. aa. asdf"
 
     @Test
     fun `invalid link should return true`() {
@@ -58,6 +60,20 @@ class ShortlyUtilTest {
     @Test
     fun `link with ending with dot should return false`() {
         val result = ShortlyUtil.isInvalidLink(caseLinkEndingWithDot)
+
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `invalid input with space should return true`() {
+        val result = ShortlyUtil.isInvalidLink(caseInvalidInputWithSpace)
+
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `valid input with space should return false`() {
+        val result = ShortlyUtil.isInvalidLink(caseValidInputWithSpace)
 
         assertThat(result).isFalse()
     }

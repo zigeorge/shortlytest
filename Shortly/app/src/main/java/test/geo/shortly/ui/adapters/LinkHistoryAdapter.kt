@@ -13,7 +13,7 @@ import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.ui.model.LinkHistoryListItem
 
 class LinkHistoryAdapter :
-    ListAdapter<LinkHistoryListItem, LinkHistoryAdapter.LinkHistoryViewHolder>(DiffCallback()) {
+    ListAdapter<LinkHistoryListItem, LinkHistoryAdapter.LinkHistoryViewHolder>(ListHistoryDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinkHistoryViewHolder {
         return LinkHistoryViewHolder(
@@ -66,7 +66,7 @@ class LinkHistoryAdapter :
         RecyclerView.ViewHolder(itemView)
 }
 
-class DiffCallback : DiffUtil.ItemCallback<LinkHistoryListItem>() {
+class ListHistoryDiff : DiffUtil.ItemCallback<LinkHistoryListItem>() {
     override fun areItemsTheSame(
         oldItem: LinkHistoryListItem,
         newItem: LinkHistoryListItem

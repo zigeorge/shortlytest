@@ -17,7 +17,9 @@ object ShortlyUtil {
             link.removePrefix(HTTP_PREFIX)
         } else if (link.contains(HTTPS_PREFIX)) {
             link.removePrefix(HTTPS_PREFIX)
-        } else link
+        } else if (link.contains(" "))
+            link.trim()
+        else link
         val parts = checkLink.split(".")
         return parts.size < 2
     }

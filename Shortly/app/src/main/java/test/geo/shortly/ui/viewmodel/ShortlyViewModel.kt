@@ -3,6 +3,7 @@ package test.geo.shortly.ui.viewmodel
 import androidx.lifecycle.*
 import com.androiddevs.shoppinglisttestingyt.other.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.data.remote.responses.ShortLinkResponse
@@ -20,7 +21,12 @@ class ShortlyViewModel @Inject constructor(
     private val networkConnection: NetworkConnection
 ) : ViewModel() {
 
-    val allLink = repository.getLinkHistory().asLiveData()
+    fun getLinkHistory() = viewModelScope.launch {
+        repository.getLinkHistory().collect {
+            linkHistory.postValue(LinkHistoryListItem.fromAllLinks(it, copiedLink))
+        }
+    }
+
     val linkHistory = MutableLiveData<List<LinkHistoryListItem>>()
 
     private var copiedLink: LinkHistoryListItem? = null
@@ -45,7 +51,7 @@ class ShortlyViewModel @Inject constructor(
         _addShortLinkStatus.postValue(Event(Resource.loading(null)))
 
         viewModelScope.launch {
-            val response = repository.insertLink(link)
+            val response = repository.insertLink(link.trim())
 
             if (response.ok) {
                 _addShortLinkStatus.postValue(Event(Resource.success(response)))
@@ -59,13 +65,8 @@ class ShortlyViewModel @Inject constructor(
         repository.deleteLink(shortLink)
     }
 
-    fun linkHistoryUpdated(copiedLink: LinkHistoryListItem? = null) {
-        if (copiedLink != null)
-            this.copiedLink = copiedLink
-        val allLink = allLink.value
-        if (allLink.isNullOrEmpty()) return
-        val linkHistory = LinkHistoryListItem.fromAllLinks(allLink, this.copiedLink)
-        this.linkHistory.postValue(linkHistory)
+    fun copyLink(copiedLink: LinkHistoryListItem) {
+        this.copiedLink = copiedLink
     }
 
 }

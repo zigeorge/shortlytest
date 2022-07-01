@@ -1,5 +1,7 @@
 package test.geo.shortly.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -10,20 +12,30 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_shortly.*
+import kotlinx.android.synthetic.main.get_started.*
+import kotlinx.android.synthetic.main.link_history.*
+import kotlinx.android.synthetic.main.link_history.rvLinkHistory
 import test.geo.shortly.R
 import test.geo.shortly.data.remote.responses.ShortLinkResponse
 import test.geo.shortly.other.Resource
 import test.geo.shortly.other.Status
+import test.geo.shortly.ui.adapters.LinkHistoryAdapter
+import test.geo.shortly.ui.model.LinkHistoryListItem
 import test.geo.shortly.ui.viewmodel.ShortlyViewModel
 
 @AndroidEntryPoint
 class ShortlyActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ShortlyViewModel
+
+    private val linkHistoryAdapter = LinkHistoryAdapter()
 
     private lateinit var loadingView: LoadingView
 
@@ -33,10 +45,12 @@ class ShortlyActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[ShortlyViewModel::class.java]
 
+        viewModel.getLinkHistory()
+
         loadingView = LoadingView.createLoading(this)
 
-        viewModel.allLink.observe(this) {
-            if (!it.isNullOrEmpty()) showHistory(savedInstanceState)
+        viewModel.linkHistory.observe(this) {
+            if (!it.isNullOrEmpty()) showHistory(it)
             else showGetStarted()
         }
 
@@ -44,6 +58,8 @@ class ShortlyActivity : AppCompatActivity() {
             val resource = it.getContentIfNotHandled()
             handleStatus(resource)
         }
+
+        setRecyclerView()
 
         tvShortenLink.setOnClickListener {
             closeKeyboard()
@@ -63,7 +79,7 @@ class ShortlyActivity : AppCompatActivity() {
                 return false
             }
         })
-        et_url_to_short.setOnFocusChangeListener { _, _ ->
+        et_url_to_short.setOnClickListener {
             resetEditText()
         }
 
@@ -79,10 +95,7 @@ class ShortlyActivity : AppCompatActivity() {
         when (resource?.status) {
             Status.ERROR -> handleError(resource)
             Status.LOADING -> showLoading()
-            Status.SUCCESS -> {
-                resetEditText()
-                showSnackBar(getString(R.string.success))
-            }
+            Status.SUCCESS -> et_url_to_short.setText("")
             else -> showSnackBar(getString(R.string.failed_to_shorten))
         }
 
@@ -91,20 +104,20 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
-    private fun showHistory(savedInstanceState: Bundle?) {
-        if(savedInstanceState == null) {
+    private fun showHistory(list: List<LinkHistoryListItem>) {
+        if(clGetStarted.isVisible) {
             clGetStarted.visibility = GONE
-            linkHistoryFragmentContainer.visibility = VISIBLE
-            supportFragmentManager.beginTransaction()
-                .add(R.id.linkHistoryFragmentContainer, LinkHistoryFragment())
-                .commit()
+            clLinkHistory.visibility = VISIBLE
         }
+        linkHistoryAdapter.submitList(list)
 
     }
 
     private fun showGetStarted() {
+        if(clGetStarted.isVisible)
+            return
         clGetStarted.visibility = VISIBLE
-        linkHistoryFragmentContainer.visibility = GONE
+        clLinkHistory.visibility = GONE
     }
 
     private fun handleError(resource: Resource<ShortLinkResponse>?) {
@@ -138,6 +151,33 @@ class ShortlyActivity : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
+    }
+
+    private fun setRecyclerView() {
+        rvLinkHistory.apply {
+            layoutManager = LinearLayoutManager(
+                this@ShortlyActivity,
+            )
+            adapter = linkHistoryAdapter
+        }
+        linkHistoryAdapter.setOnRemoveIconClickListener {
+            viewModel.deleteLnk(it)
+        }
+
+        linkHistoryAdapter.setOnCopyButtonClickListener {
+            copyLink(it)
+        }
+    }
+
+    private fun copyLink(link: LinkHistoryListItem) {
+        val clipboard: ClipboardManager? =
+            ContextCompat.getSystemService(
+                this,
+                ClipboardManager::class.java
+            )
+        val clip = ClipData.newPlainText(link.shortLink.origin, link.shortLink.shortLink)
+        clipboard?.setPrimaryClip(clip)
+        viewModel.copyLink(link)
     }
 
     private fun showLoading() {
