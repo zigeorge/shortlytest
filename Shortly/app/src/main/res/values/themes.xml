@@ -3,7 +3,7 @@
     <style name="Theme.Shortly" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/cyan</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorPrimaryVariant">@color/grayish_violet</item>
         <item name="colorOnPrimary">@color/very_dark_violet</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/dark_violet</item>

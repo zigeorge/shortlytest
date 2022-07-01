@@ -23,7 +23,7 @@ class ShortlyViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
 
     private lateinit var viewModel: ShortlyViewModel
 

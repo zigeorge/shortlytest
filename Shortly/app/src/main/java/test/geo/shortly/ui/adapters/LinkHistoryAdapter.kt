@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_link_history.view.*
 import test.geo.shortly.R
 import test.geo.shortly.data.local.ShortLink
-import test.geo.shortly.ui.model.LinkHistoryListItem
 
 class LinkHistoryAdapter :
-    ListAdapter<LinkHistoryListItem, LinkHistoryAdapter.LinkHistoryViewHolder>(ListHistoryDiff()) {
+    ListAdapter<ShortLink, LinkHistoryAdapter.LinkHistoryViewHolder>(ListHistoryDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinkHistoryViewHolder {
         return LinkHistoryViewHolder(
@@ -26,10 +25,10 @@ class LinkHistoryAdapter :
     override fun onBindViewHolder(holder: LinkHistoryViewHolder, position: Int) {
         val item = getItem(position)
         holder.itemView.apply {
-            tvOriginLink.text = item.shortLink.origin
-            tvShortenLink.text = item.shortLink.shortLink
+            tvOriginLink.text = item.origin
+            tvShortenLink.text = item.shortLink
 
-            if (item.isCopied) {
+            if (position == latestCopiedPosition) {
                 tvCopyBtn.setBackgroundResource(R.drawable.btn_bg_copied)
                 tvCopyBtn.text = holder.context.getString(R.string.btn_text_copied)
             } else {
@@ -39,15 +38,31 @@ class LinkHistoryAdapter :
 
             ivRemoveHistory.setOnClickListener {
                 onRemoveIconClickListener?.let { click ->
-                    click(item.shortLink)
+                    click(item)
                 }
             }
             tvCopyBtn.setOnClickListener {
                 onCopyButtonClickListener?.let { click ->
                     click(item)
                 }
+                latestCopiedPosition = if(latestCopiedPosition == -1) {
+                    holder.adapterPosition
+                } else {
+                    notifyItemChanged(latestCopiedPosition)
+                    holder.adapterPosition
+                }
+                notifyItemChanged(holder.adapterPosition)
             }
         }
+    }
+
+    private var latestCopiedPosition = -1
+
+    fun updateCopiedPosition() {
+        if (latestCopiedPosition == -1) {
+            return
+        }
+        latestCopiedPosition++
     }
 
     private var onRemoveIconClickListener: ((ShortLink) -> Unit)? = null
@@ -56,9 +71,9 @@ class LinkHistoryAdapter :
         onRemoveIconClickListener = listener
     }
 
-    private var onCopyButtonClickListener: ((LinkHistoryListItem) -> Unit)? = null
+    private var onCopyButtonClickListener: ((ShortLink) -> Unit)? = null
 
-    fun setOnCopyButtonClickListener(listener: (LinkHistoryListItem) -> Unit) {
+    fun setOnCopyButtonClickListener(listener: (ShortLink) -> Unit) {
         onCopyButtonClickListener = listener
     }
 
@@ -66,17 +81,17 @@ class LinkHistoryAdapter :
         RecyclerView.ViewHolder(itemView)
 }
 
-class ListHistoryDiff : DiffUtil.ItemCallback<LinkHistoryListItem>() {
+class ListHistoryDiff : DiffUtil.ItemCallback<ShortLink>() {
     override fun areItemsTheSame(
-        oldItem: LinkHistoryListItem,
-        newItem: LinkHistoryListItem
+        oldItem: ShortLink,
+        newItem: ShortLink
     ): Boolean {
-        return oldItem.shortLink == newItem.shortLink
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: LinkHistoryListItem,
-        newItem: LinkHistoryListItem
+        oldItem: ShortLink,
+        newItem: ShortLink
     ): Boolean {
         return oldItem == newItem
     }

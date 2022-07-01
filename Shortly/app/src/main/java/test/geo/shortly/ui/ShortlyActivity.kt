@@ -21,13 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_shortly.*
 import kotlinx.android.synthetic.main.get_started.*
 import kotlinx.android.synthetic.main.link_history.*
-import kotlinx.android.synthetic.main.link_history.rvLinkHistory
 import test.geo.shortly.R
+import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.data.remote.responses.ShortLinkResponse
 import test.geo.shortly.other.Resource
 import test.geo.shortly.other.Status
 import test.geo.shortly.ui.adapters.LinkHistoryAdapter
-import test.geo.shortly.ui.model.LinkHistoryListItem
 import test.geo.shortly.ui.viewmodel.ShortlyViewModel
 
 @AndroidEntryPoint
@@ -44,8 +43,6 @@ class ShortlyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_shortly)
 
         viewModel = ViewModelProvider(this)[ShortlyViewModel::class.java]
-
-        viewModel.getLinkHistory()
 
         loadingView = LoadingView.createLoading(this)
 
@@ -104,12 +101,13 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
-    private fun showHistory(list: List<LinkHistoryListItem>) {
+    private fun showHistory(list: List<ShortLink>) {
         if(clGetStarted.isVisible) {
             clGetStarted.visibility = GONE
             clLinkHistory.visibility = VISIBLE
         }
-        linkHistoryAdapter.submitList(list)
+        linkHistoryAdapter.submitList(list.reversed())
+        linkHistoryAdapter.updateCopiedPosition()
 
     }
 
@@ -169,15 +167,14 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
-    private fun copyLink(link: LinkHistoryListItem) {
+    private fun copyLink(link: ShortLink) {
         val clipboard: ClipboardManager? =
             ContextCompat.getSystemService(
                 this,
                 ClipboardManager::class.java
             )
-        val clip = ClipData.newPlainText(link.shortLink.origin, link.shortLink.shortLink)
+        val clip = ClipData.newPlainText(link.origin, link.shortLink)
         clipboard?.setPrimaryClip(clip)
-        viewModel.copyLink(link)
     }
 
     private fun showLoading() {
