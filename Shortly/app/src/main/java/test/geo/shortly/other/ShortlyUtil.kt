@@ -11,6 +11,7 @@ object ShortlyUtil {
 
     private const val HTTP_PREFIX = "http://"
     private const val HTTPS_PREFIX = "https://"
+    private const val MIN_PART_SIZE_OF_URL = 2
 
     fun isInvalidLink(link: String): Boolean {
         val checkLink = if (link.contains(HTTP_PREFIX)) {
@@ -19,7 +20,7 @@ object ShortlyUtil {
             link.removePrefix(HTTPS_PREFIX)
         } else link
         val parts = checkLink.split(".")
-        return parts.size < 2
+        return parts.size < MIN_PART_SIZE_OF_URL
     }
 
     fun checkNetworkConnection(context: Context): Boolean {
