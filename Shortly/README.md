@@ -1,5 +1,5 @@
 # Shortly Android application
-This application is an interview assessment of MAYD
+This application is an interview assessment of MAYD. The application ID for the project is test.geo.shortly
 
 # Description
 This application provides a user interface to enter URL to shorten. User can also see a list of
