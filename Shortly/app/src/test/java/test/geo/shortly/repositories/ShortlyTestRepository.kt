@@ -38,15 +38,11 @@ class ShortlyTestRepository : ShortlyRepository {
                 )
             )
         }
-        if(response.ok) {
-            linkHistory.add(
-                ShortLink(
-                    origin = response.result!!.original_link,
-                    shortLink = response.result!!.short_link
-                )
-            )
-        }
         return response
+    }
+
+    override suspend fun insertLink(shortLink: ShortLink) {
+        linkHistory.add(shortLink)
     }
 
     override suspend fun deleteLink(shortLink: ShortLink) {

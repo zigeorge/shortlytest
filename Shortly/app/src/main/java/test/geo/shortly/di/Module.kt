@@ -22,6 +22,15 @@ import test.geo.shortly.ui.LoadingView
 import test.geo.shortly.ui.adapters.LinkHistoryAdapter
 import javax.inject.Singleton
 
+/*
+* Represents Hilt singleton module class
+* The @Singleton functions are defined to create dependencies which are later injected in required classes
+* e.g., ShortlyRepositoryImpl is depended on instance of ShortlyDao and ShortlyAPI classes hence, singleton provider
+* of the mentioned classes has been created here so that hilt can later inject the dependencies accordingly
+* Dependencies are injected in singleton provider functions as well for example hilt provides the shortlyAPI in provideShortlyRepository
+* function through provideShortlyAPI, here the first function doesn't have to annotate
+* */
+
 @Module
 @InstallIn(SingletonComponent::class)
 object Module {

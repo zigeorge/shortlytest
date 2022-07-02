@@ -30,14 +30,23 @@ import test.geo.shortly.ui.adapters.LinkHistoryAdapter
 import test.geo.shortly.ui.viewmodel.ShortlyViewModel
 import javax.inject.Inject
 
+/*
+* Represents an Android activity
+* The ShortlyActivity enables user to enter a link in an editText and a button to shorten the input
+* It also shows a list of already shorten links from API and shows a splash to get start when no link
+* had been shorten using this application
+* User can also copy a shorten link from the list to their device's clipboard shown and delete it
+* form the list
+* */
+
 @AndroidEntryPoint
 class ShortlyActivity : AppCompatActivity() {
 
     lateinit var viewModel: ShortlyViewModel        /* made public to test activity */
 
-    @Inject lateinit var linkHistoryAdapter: LinkHistoryAdapter     /* added dependency in module */
+    @Inject lateinit var linkHistoryAdapter: LinkHistoryAdapter     /* added dependency in singleton module */
 
-    @Inject lateinit var loadingView: LoadingView
+    @Inject lateinit var loadingView: LoadingView   /* added dependency in singleton module */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,12 +92,18 @@ class ShortlyActivity : AppCompatActivity() {
 
     }
 
+    /*
+    * Reset the et_url_to_short editText view
+    * */
     private fun resetEditText() {
         et_url_to_short.setBackgroundResource(R.drawable.bg_url_edit)
         et_url_to_short.setHintTextColor(Color.parseColor("#9E9AA7"))
         et_url_to_short.setHint(R.string.hint_shorten_a_link_here)
     }
 
+    /*
+    * Handle the status of the request to create a short link to interact with the user properly
+    * */
     private fun handleStatus(resource: Resource<ShortLinkResponse>?) {
         when (resource?.status) {
             Status.ERROR -> handleError(resource)
@@ -102,6 +117,10 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * Show history of links user had shorten using the app so far
+    * @param list: List<ShortLink> a list of ShortLink obtain from DB, that was previously stored there
+    * */
     private fun showHistory(list: List<ShortLink>) {
         if(clGetStarted.isVisible) {
             clGetStarted.visibility = GONE
@@ -112,6 +131,9 @@ class ShortlyActivity : AppCompatActivity() {
 
     }
 
+    /*
+    * Show a splash screen that shows a get start graphic
+    * */
     private fun showGetStarted() {
         if(clGetStarted.isVisible)
             return
@@ -119,6 +141,10 @@ class ShortlyActivity : AppCompatActivity() {
         clLinkHistory.visibility = GONE
     }
 
+    /*
+    * handle any error occurs during the process of shortening a link and interact with user
+    * accordingly
+    * */
     private fun handleError(resource: Resource<ShortLinkResponse>?) {
         when (resource?.message) {
             LinkError.EMPTY_LINK.msg -> {
@@ -137,6 +163,10 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * shows a snackBar
+    * @param text: String is the given text to show in the snackBar
+    * */
     private fun showSnackBar(text: String) {
         Snackbar.make(
             findViewById(R.id.main),
@@ -145,6 +175,9 @@ class ShortlyActivity : AppCompatActivity() {
         ).show()
     }
 
+    /*
+    * closes the keyboard for currently focused view
+    * */
     private fun closeKeyboard() {
         this.currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -152,6 +185,9 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * set a recyclerView to show link history in a list
+    * */
     private fun setRecyclerView() {
         rvLinkHistory.apply {
             layoutManager = LinearLayoutManager(
@@ -168,6 +204,10 @@ class ShortlyActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * Copies a link
+    * @param link: ShortLink is the shortLink instance user tries to copy
+    * */
     private fun copyLink(link: ShortLink) {
         val clipboard: ClipboardManager? =
             ContextCompat.getSystemService(
@@ -187,6 +227,10 @@ class ShortlyActivity : AppCompatActivity() {
     }
 }
 
+/*
+* Represents an enum class of different type of errors that may occur during the process of
+* shortening a link
+* */
 enum class LinkError(val msg: String) {
     EMPTY_LINK("Empty Link"),
     INVALID_LINK("Invalid Link"),

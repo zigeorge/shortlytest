@@ -6,12 +6,21 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 
+/*
+* Represents a singleton util class with some helper functions
+* */
 
 object ShortlyUtil {
 
     private const val HTTP_PREFIX = "http://"
     private const val HTTPS_PREFIX = "https://"
 
+
+    /*
+    * Returns true if a link is invalid and false if not
+    * @param link: String is the given link to validate
+    * The validation mechanism is built checking if the provided link has at least one [.] in it
+    * */
     fun isInvalidLink(link: String): Boolean {
         val checkLink = if (link.contains(HTTP_PREFIX)) {
             link.removePrefix(HTTP_PREFIX)
@@ -24,6 +33,9 @@ object ShortlyUtil {
         return parts.size < 2
     }
 
+    /*
+    * Check if network connectivity is available in a given context
+    * */
     fun checkNetworkConnection(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val networkRequest = NetworkRequest.Builder()

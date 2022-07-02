@@ -9,6 +9,10 @@ import android.view.Window
 import android.widget.TextView
 import test.geo.shortly.R
 
+/*
+* represents a dialog with a custom view to show loading when app awaits for any background/suspended
+* process to execute
+* */
 class LoadingView {
 
     private lateinit var dialog: Dialog
@@ -34,6 +38,9 @@ class LoadingView {
     }
 
     companion object {
+        /*
+        * Creates the loadingView for a given context
+        * */
         fun createLoading(context: Context): LoadingView {
             val dialog = Dialog(context)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
