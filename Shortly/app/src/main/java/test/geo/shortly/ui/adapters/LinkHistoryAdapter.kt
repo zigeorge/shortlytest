@@ -26,7 +26,7 @@ class LinkHistoryAdapter :
         val item = getItem(position)
         holder.itemView.apply {
             tvOriginLink.text = item.origin
-            tvShortenLink.text = item.shortLink
+            tvShortLink.text = item.shortLink
 
             if (position == latestCopiedPosition) {
                 tvCopyBtn.setBackgroundResource(R.drawable.btn_bg_copied)

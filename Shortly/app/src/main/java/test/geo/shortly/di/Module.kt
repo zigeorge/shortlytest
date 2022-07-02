@@ -19,6 +19,7 @@ import test.geo.shortly.other.ShortlyUtil
 import test.geo.shortly.repositories.ShortlyRepository
 import test.geo.shortly.repositories.ShortlyRepositoryImpl
 import test.geo.shortly.ui.LoadingView
+import test.geo.shortly.ui.adapters.LinkHistoryAdapter
 import javax.inject.Singleton
 
 @Module
@@ -59,5 +60,15 @@ object Module {
     fun provideNetworkInfo(
         @ApplicationContext context: Context
     ) = NetworkConnection(ShortlyUtil.checkNetworkConnection(context))
+
+    @Singleton
+    @Provides
+    fun provideAdapter() = LinkHistoryAdapter()
+
+    @Singleton
+    @Provides
+    fun provideLoadingView(
+        @ApplicationContext context: Context
+    ) = LoadingView.createLoading(context)
 
 }

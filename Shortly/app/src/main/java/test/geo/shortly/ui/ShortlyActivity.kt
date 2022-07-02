@@ -28,15 +28,16 @@ import test.geo.shortly.other.Resource
 import test.geo.shortly.other.Status
 import test.geo.shortly.ui.adapters.LinkHistoryAdapter
 import test.geo.shortly.ui.viewmodel.ShortlyViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShortlyActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: ShortlyViewModel
+    lateinit var viewModel: ShortlyViewModel        /* made public to test activity */
 
-    private val linkHistoryAdapter = LinkHistoryAdapter()
+    @Inject lateinit var linkHistoryAdapter: LinkHistoryAdapter     /* added dependency in module */
 
-    private lateinit var loadingView: LoadingView
+    @Inject lateinit var loadingView: LoadingView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
