@@ -17,4 +17,4 @@ keystore.properties
 app/debug
 app/staging
 app/release
-.idea
+/.idea
