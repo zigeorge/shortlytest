@@ -51,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvOriginLink" />
 
         <TextView
-            android:id="@+id/tvShortenLink"
+            android:id="@+id/tvShortLink"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -70,7 +70,7 @@
             android:id="@+id/tvCopyBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btn_url_short"
+            android:background="@drawable/btn_bg_copy"
             android:gravity="center"
             android:text="@string/btn_text_copy"
             android:textColor="@color/white"
@@ -80,7 +80,7 @@
             android:layout_margin="@dimen/_19sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvShortenLink" />
+            app:layout_constraintTop_toBottomOf="@+id/tvShortLink" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

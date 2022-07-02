@@ -3,26 +3,46 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'kotlin-android-extensions'
 }
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
-    compileSdk 32
+    compileSdk rootProject.compileSdkVersion
 
     defaultConfig {
-        applicationId "test.geo.shortly"
-        minSdk 21
-        targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        applicationId rootProject.applicationId
+        minSdk rootProject.minSdkVersion
+        targetSdk rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "test.geo.shortly.HiltTestRunner"
+    }
+
+    signingConfigs {
+        config {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+        staging {
+            initWith debug
+            applicationIdSuffix ".debugStaging"
         }
     }
     compileOptions {
@@ -76,24 +96,26 @@ dependencies {
     kapt 'com.google.dagger:hilt-compiler:2.42'
 
     // For instrumentation tests
-    androidTestImplementation  'com.google.dagger:hilt-android-testing:2.42'
+    androidTestImplementation  "com.google.dagger:hilt-android-testing:$rootProject.hiltTestVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
     androidTestImplementation ("androidx.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestImplementation "androidx.test.ext:junit:$rootProject.androidxJunitVersion"
-    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
+    androidTestImplementation "com.google.truth:truth:1.1.3"
+    androidTestImplementation "org.mockito:mockito-core:4.0.0"
+    kaptAndroidTest "com.google.dagger:hilt-compiler:$rootProject.hiltTestVersion"
 
     // For local unit tests
     testImplementation "junit:junit:$rootProject.junitVersion"
-    testImplementation 'com.google.dagger:hilt-android-testing:2.42'
+    testImplementation "com.google.dagger:hilt-android-testing:$rootProject.hiltTestVersion"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "org.robolectric:robolectric:4.5"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1"
     testImplementation "com.google.truth:truth:1.1.3"
     testImplementation "org.mockito:mockito-core:4.0.0"
-    kaptTest 'com.google.dagger:hilt-compiler:2.42'
+    kaptTest "com.google.dagger:hilt-compiler:$rootProject.hiltTestVersion"
 }
 
 kapt {

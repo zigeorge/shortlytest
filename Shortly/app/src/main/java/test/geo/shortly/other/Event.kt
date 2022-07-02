@@ -1,4 +1,4 @@
-package com.androiddevs.shoppinglisttestingyt.other
+package test.geo.shortly.other
 
 open class Event<out T>(private val content: T) {
 

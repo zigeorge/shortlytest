@@ -7,7 +7,7 @@ import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.data.remote.responses.ShortLinkResponse
 import test.geo.shortly.data.remote.responses.ShortLinkResult
 
-class ShortlyTestRepository : ShortlyRepository {
+class ShortlyAndroidTestRepository : ShortlyRepository {
 
     private val linkHistory = mutableListOf<ShortLink>()
 
