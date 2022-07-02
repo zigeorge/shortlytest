@@ -14,3 +14,7 @@
 .cxx
 local.properties
 keystore.properties
+app/debug
+app/staging
+app/release
+.idea

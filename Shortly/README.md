@@ -53,8 +53,7 @@ I've used kotlin to write this application as it provides an easy and simpler sy
 I've written unit test for the ShortlyViewModel class to verify if all the functions are behaving properly. Also written test for a util class. To test the room database I'd have to write instrumented unit test as database testing needed a context which can only be provided through instrumentation.
 
 # GIT Flow
-I've maintained standard of git flow during the development process.
-Now sync and rebuild.
+I've maintained standard of git flow during the development process. I've used commitzen plugin to make my commits.
 
 # Conclusion
 This has been a great experience for me. I've learned many things while writing this assesment. I've learned how RxJava works and also learned how to migrate a project from Rx to live data and coroutine. I hope you like the project.
