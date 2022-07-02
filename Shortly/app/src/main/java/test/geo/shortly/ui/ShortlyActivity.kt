@@ -18,12 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_shortly.*
-import kotlinx.android.synthetic.main.get_started.*
-import kotlinx.android.synthetic.main.link_history.*
 import test.geo.shortly.R
 import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.data.remote.responses.ShortLinkResponse
+import test.geo.shortly.databinding.ActivityShortlyBinding
 import test.geo.shortly.other.Resource
 import test.geo.shortly.other.Status
 import test.geo.shortly.ui.adapters.LinkHistoryAdapter
@@ -48,9 +46,12 @@ class ShortlyActivity : AppCompatActivity() {
 
     @Inject lateinit var loadingView: LoadingView   /* added dependency in singleton module */
 
+    private lateinit var binding: ActivityShortlyBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_shortly)
+        binding = ActivityShortlyBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[ShortlyViewModel::class.java]
 
@@ -68,11 +69,11 @@ class ShortlyActivity : AppCompatActivity() {
 
         setRecyclerView()
 
-        tvShortenLink.setOnClickListener {
+        binding.tvShortenLink.setOnClickListener {
             closeKeyboard()
-            viewModel.addShortLink(et_url_to_short.text.toString())
+            viewModel.addShortLink(binding.etUrlToShort.text.toString())
         }
-        et_url_to_short.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+        binding.etUrlToShort.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(
                 textView: TextView?,
                 id: Int,
@@ -80,13 +81,13 @@ class ShortlyActivity : AppCompatActivity() {
             ): Boolean {
                 if (id == EditorInfo.IME_ACTION_DONE) {
                     closeKeyboard()
-                    viewModel.addShortLink(et_url_to_short.text.toString())
+                    viewModel.addShortLink(binding.etUrlToShort.text.toString())
                     return true
                 }
                 return false
             }
         })
-        et_url_to_short.setOnClickListener {
+        binding.etUrlToShort.setOnClickListener {
             resetEditText()
         }
 
@@ -96,9 +97,9 @@ class ShortlyActivity : AppCompatActivity() {
     * Reset the et_url_to_short editText view
     * */
     private fun resetEditText() {
-        et_url_to_short.setBackgroundResource(R.drawable.bg_url_edit)
-        et_url_to_short.setHintTextColor(Color.parseColor("#9E9AA7"))
-        et_url_to_short.setHint(R.string.hint_shorten_a_link_here)
+        binding.etUrlToShort.setBackgroundResource(R.drawable.bg_url_edit)
+        binding.etUrlToShort.setHintTextColor(Color.parseColor("#9E9AA7"))
+        binding.etUrlToShort.setHint(R.string.hint_shorten_a_link_here)
     }
 
     /*
@@ -108,7 +109,10 @@ class ShortlyActivity : AppCompatActivity() {
         when (resource?.status) {
             Status.ERROR -> handleError(resource)
             Status.LOADING -> showLoading()
-            Status.SUCCESS -> et_url_to_short.setText("")
+            Status.SUCCESS -> {
+                binding.etUrlToShort.setText("")
+                linkHistoryAdapter.updateCopiedPosition()
+            }
             else -> showSnackBar(getString(R.string.failed_to_shorten))
         }
 
@@ -122,12 +126,11 @@ class ShortlyActivity : AppCompatActivity() {
     * @param list: List<ShortLink> a list of ShortLink obtain from DB, that was previously stored there
     * */
     private fun showHistory(list: List<ShortLink>) {
-        if(clGetStarted.isVisible) {
-            clGetStarted.visibility = GONE
-            clLinkHistory.visibility = VISIBLE
+        if(binding.includeGetStarted.clGetStarted.isVisible) {
+            binding.includeGetStarted.clGetStarted.visibility = GONE
+            binding.includeLinkHistory.clLinkHistory.visibility = VISIBLE
         }
         linkHistoryAdapter.submitList(list.reversed())
-        linkHistoryAdapter.updateCopiedPosition()
 
     }
 
@@ -135,10 +138,10 @@ class ShortlyActivity : AppCompatActivity() {
     * Show a splash screen that shows a get start graphic
     * */
     private fun showGetStarted() {
-        if(clGetStarted.isVisible)
+        if(binding.includeGetStarted.clGetStarted.isVisible)
             return
-        clGetStarted.visibility = VISIBLE
-        clLinkHistory.visibility = GONE
+        binding.includeGetStarted.clGetStarted.visibility = VISIBLE
+        binding.includeLinkHistory.clLinkHistory.visibility = GONE
     }
 
     /*
@@ -148,12 +151,12 @@ class ShortlyActivity : AppCompatActivity() {
     private fun handleError(resource: Resource<ShortLinkResponse>?) {
         when (resource?.message) {
             LinkError.EMPTY_LINK.msg -> {
-                et_url_to_short.setBackgroundResource(R.drawable.bg_url_edit_error)
-                et_url_to_short.setHintTextColor(Color.parseColor("#F46262"))
-                et_url_to_short.setHint(R.string.empty_link_error)
+                binding.etUrlToShort.setBackgroundResource(R.drawable.bg_url_edit_error)
+                binding.etUrlToShort.setHintTextColor(Color.parseColor("#F46262"))
+                binding.etUrlToShort.setHint(R.string.empty_link_error)
             }
             LinkError.INVALID_LINK.msg -> {
-                et_url_to_short.setBackgroundResource(R.drawable.bg_url_edit_error)
+                binding.etUrlToShort.setBackgroundResource(R.drawable.bg_url_edit_error)
                 showSnackBar(LinkError.INVALID_LINK.msg)
             }
             LinkError.NO_INTERNET.msg -> showSnackBar(resource.message)
@@ -189,7 +192,7 @@ class ShortlyActivity : AppCompatActivity() {
     * set a recyclerView to show link history in a list
     * */
     private fun setRecyclerView() {
-        rvLinkHistory.apply {
+        binding.includeLinkHistory.rvLinkHistory.apply {
             layoutManager = LinearLayoutManager(
                 this@ShortlyActivity,
             )

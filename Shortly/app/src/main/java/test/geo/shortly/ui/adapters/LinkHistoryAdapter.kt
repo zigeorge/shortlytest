@@ -2,14 +2,13 @@ package test.geo.shortly.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.list_item_link_history.view.*
 import test.geo.shortly.R
 import test.geo.shortly.data.local.ShortLink
+import test.geo.shortly.databinding.ListItemLinkHistoryBinding
 
 
 /*
@@ -20,16 +19,18 @@ class LinkHistoryAdapter :
     ListAdapter<ShortLink, LinkHistoryAdapter.LinkHistoryViewHolder>(ListHistoryDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinkHistoryViewHolder {
-        return LinkHistoryViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_item_link_history, parent, false),
-            parent.context
+        val binding = ListItemLinkHistoryBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
+        return LinkHistoryViewHolder(binding, parent.context)
+
     }
 
     override fun onBindViewHolder(holder: LinkHistoryViewHolder, position: Int) {
         val item = getItem(position)
-        holder.itemView.apply {
+        holder.binding.apply {
             tvOriginLink.text = item.origin
             tvShortLink.text = item.shortLink
 
@@ -60,7 +61,7 @@ class LinkHistoryAdapter :
     * adapter about the changed position.
     * */
     private fun setLatestCopiedPosition(adapterPosition: Int) {
-        latestCopiedPosition = if(latestCopiedPosition == -1) {
+        latestCopiedPosition = if (latestCopiedPosition == -1) {
             adapterPosition
         } else {
             notifyItemChanged(latestCopiedPosition)
@@ -95,13 +96,13 @@ class LinkHistoryAdapter :
     /* Represents the listener for when user taps on copy button to copy a shorten link to clipboard */
     private var onCopyButtonClickListener: ((ShortLink) -> Unit)? = null
 
-    /* Sets onCopuButtonClickListener */
+    /* Sets onCopyButtonClickListener */
     fun setOnCopyButtonClickListener(listener: (ShortLink) -> Unit) {
         onCopyButtonClickListener = listener
     }
 
-    class LinkHistoryViewHolder(itemView: View, val context: Context) :
-        RecyclerView.ViewHolder(itemView)
+    class LinkHistoryViewHolder(val binding: ListItemLinkHistoryBinding, val context: Context) :
+        RecyclerView.ViewHolder(binding.root)
 }
 
 

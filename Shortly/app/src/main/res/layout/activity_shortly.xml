@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
         <include
+            android:id="@+id/include_get_started"
             layout="@layout/get_started"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -20,6 +21,7 @@
             app:layout_constraintBottom_toTopOf="@+id/clMainActionContainer" />
 
         <include
+            android:id="@+id/include_link_history"
             layout="@layout/link_history"
             android:visibility="gone"
             android:layout_width="match_parent"

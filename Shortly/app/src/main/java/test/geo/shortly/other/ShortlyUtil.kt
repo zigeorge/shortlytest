@@ -35,6 +35,7 @@ object ShortlyUtil {
 
     /*
     * Check if network connectivity is available in a given context
+    * used deprecated methods here for older version support
     * */
     fun checkNetworkConnection(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
