@@ -1,10 +1,6 @@
 package test.geo.shortly.ui
 
-import android.content.Context
-import android.widget.EditText
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
@@ -14,7 +10,6 @@ import androidx.test.filters.MediumTest
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.android.synthetic.main.activity_shortly.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -25,13 +20,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 import test.geo.shortly.R
-import test.geo.shortly.data.local.ShortLink
 import test.geo.shortly.getOrAwaitValueTest
-import test.geo.shortly.other.NetworkConnection
-import test.geo.shortly.repositories.ShortlyAndroidTestRepository
 import test.geo.shortly.ui.viewmodel.ShortlyViewModel
 
 @MediumTest
